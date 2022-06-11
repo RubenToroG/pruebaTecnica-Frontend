@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import List from "../components/List";
 
 const CompaniesList = () => {
-  let [companies, setCompanies] = useState([]);
+  let [companies, setCompanies] = useState(null);
 
   useEffect(() => {
     getCompanies();
@@ -14,9 +14,24 @@ const CompaniesList = () => {
     setCompanies(data);
   };
 
+  let updateCompany = async () => {
+    fetch(`/api/notes/${companies.id}/`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(companies),
+    });
+  };
+
+  let handleChange = (value) => {
+    setCompanies((companies) => ({ ...companies, body: value }));
+    console.log("Handle Change:", companies);
+  };
+
   return (
-    <div>
-      <div className="list">
+    <div className="company">
+      <div className="company-list">
         {companies.map((company, index) => (
           <List key={index} company={company} />
         ))}
